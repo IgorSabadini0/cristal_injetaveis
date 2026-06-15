@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clínica Cristal | Estética e Injetáveis</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon">
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
@@ -21,7 +21,7 @@
     <header class="header" id="header">
         <div class="container nav-container">
             <a href="#" class="logo">
-                <img src="logo.png" alt="Clínica Cristal Logo">
+                <img src="assets/logo.png" alt="Clínica Cristal Logo">
             </a>
 
             <nav class="navbar">
@@ -30,7 +30,7 @@
                     <li class="nav-item"><a href="#sobre" class="nav-link">Sobre</a></li>
                     <li class="nav-item"><a href="#servicos" class="nav-link">Procedimentos</a></li>
                     <li class="nav-item"><a href="#diferenciais" class="nav-link">Diferenciais</a></li>
-                    <li class="nav-item"><a href="#depoimentos" class="nav-link">Depoimentos</a></li>
+                    <li class="nav-item"><a href="#blog" class="nav-link">Blog</a></li>
                     <li class="nav-item"><a href="#contato" class="nav-link">Contato</a></li>
                 </ul>
             </nav>
@@ -65,7 +65,7 @@
         <div class="container sobre-container">
             <div class="sobre-img reveal-left">
                 <!-- Imagem ilustrativa de uma clínica/médica -->
-                <img src="faixada.jpeg" alt="Dra. Adriana Bonin - Clínica Cristal">
+                <img src="/assets/faixada.jpeg" alt="Dra. Adriana Bonin - Clínica Cristal">
             </div>
             <div class="sobre-text reveal-right">
                 <h2 class="section-title">Sobre a Clínica Cristal</h2>
@@ -188,66 +188,42 @@
         </div>
     </section>
 
-    <!-- Depoimentos Section -->
-    <section class="depoimentos section bg-light" id="depoimentos">
+    <!-- blog Section -->
+    <section id="blog" class="section reveal">
+        <div class="section-header reveal">
+            <h2 class="section-title">Artigos & Notícias - <a href="post.html"><span class="acessar-materia">Acessar
+                        toda a
+                        matéria</span></a></h2>
+        </div>
         <div class="container">
-            <div class="section-header reveal">
-                <h2 class="section-title">Histórias Reais</h2>
-                <p class="section-description">O que nossos pacientes dizem sobre a experiência na Clínica Cristal.</p>
-            </div>
 
-            <div class="depoimentos-grid">
-                <div class="depoimento-card reveal">
-                    <div class="quote-icon"><i class="fa-solid fa-quote-left"></i></div>
-                    <p class="depoimento-texto">"Ambiente incrível e profissionais super atenciosos. Fiz preenchimento
-                        labial e o resultado ficou super natural, exatamente como eu queria!"</p>
-                    <div class="paciente-info">
-                        <div class="paciente-foto">A</div>
-                        <div>
-                            <h4>Ana Paula</h4>
-                            <span class="estrelas">
-                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
-                                    class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
-                                    class="fa-solid fa-star"></i>
-                            </span>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="depoimento-card reveal">
-                    <div class="quote-icon"><i class="fa-solid fa-quote-left"></i></div>
-                    <p class="depoimento-texto">"Sempre tive medo de agulhas, mas a Dra. me passou tanta confiança! O
-                        protocolo de bioestimulador mudou a textura da minha pele."</p>
-                    <div class="paciente-info">
-                        <div class="paciente-foto">C</div>
-                        <div>
-                            <h4>Camila M.</h4>
-                            <span class="estrelas">
-                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
-                                    class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
-                                    class="fa-solid fa-star"></i>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="depoimento-card reveal">
-                    <div class="quote-icon"><i class="fa-solid fa-quote-left"></i></div>
-                    <p class="depoimento-texto">"A melhor clínica de injetáveis da região. O cuidado pós-atendimento e a
-                        infraestrutura são padrão ouro. Recomendo de olhos fechados."</p>
-                    <div class="paciente-info">
-                        <div class="paciente-foto">R</div>
-                        <div>
-                            <h4>Ricardo S.</h4>
-                            <span class="estrelas">
-                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
-                                    class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
-                                    class="fa-solid fa-star"></i>
-                            </span>
-                        </div>
-                    </div>
+            <!-- Barra de Pesquisa -->
+            <div class="search-container">
+                <div class="search-wrapper">
+                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="m21 21-4.35-4.35" />
+                    </svg>
+                    <input type="text" id="searchInput" placeholder="Pesquisar por título ou conteúdo..."
+                        class="search-input" aria-label="Pesquisar artigos">
+                    <button id="clearSearch" class="clear-btn" aria-label="Limpar pesquisa" title="Limpar pesquisa">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                        </svg>
+                    </button>
                 </div>
             </div>
+
+            <p class="section-sub">Publicações médicas para informar e orientar.</p>
+            <div id="posts" class="grid posts"></div>
+            <p id="no-posts" class="muted" hidden>Nenhuma publicação encontrada.</p>
+            <p class="muted small">
+            </p>
         </div>
     </section>
 
@@ -316,7 +292,7 @@
     <footer class="footer">
         <div class="container footer-container">
             <div class="footer-brand">
-                <img src="logo.png" alt="Clínica Cristal Logo" class="footer-logo">
+                <img src="assets/logo.png" alt="Clínica Cristal Logo" class="footer-logo">
                 <p>Cuidado médico multidisciplinar, estética avançada e injetáveis com segurança, tecnologia e
                     excelência desde 2017.</p>
             </div>

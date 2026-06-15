@@ -33,6 +33,10 @@
     /* Bordas mais sérias/tradicionais */
     --radius-sm: 4px;
     --radius-md: 8px;
+    --radius-lg: 1rem;
+
+    /* Cores de suporte */
+    --color-muted: #717171;
 }
 
 * {
@@ -387,33 +391,137 @@ img {
 }
 
 /* =========================================
-   Depoimentos Section
+   Blog Section
    ========================================= */
-.depoimentos-grid {
+.blogs-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 30px;
 }
 
-.depoimento-card {
+.posts {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.acessar-materia {
+    color: var(--color-dark);
+}
+
+.post-card {
     background: var(--color-white);
-    padding: 40px 30px;
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-sm);
     border: 1px solid var(--color-gray);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.post-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-primary);
+}
+
+.post-card h3 {
+    margin: 0.5rem 0 0.8rem;
+    font-size: 1.2rem;
+}
+
+.post-card p {
+    color: var(--color-muted);
+    font-size: 0.95rem;
+}
+
+.post-meta {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    font-size: 0.85rem;
+    color: var(--color-muted);
+}
+
+/* Barra de Pesquisa */
+.search-container {
+    margin: 0.6rem 0 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+.search-wrapper {
     position: relative;
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    align-items: center;
 }
 
-.quote-icon {
-    margin-bottom: 20px;
-    font-size: 2rem;
-    color: var(--color-gray);
-}
-
-.depoimento-texto {
-    font-style: italic;
-    margin-bottom: 30px;
+.search-input {
+    width: 100%;
+    padding: 0.875rem 1rem 0.875rem 3rem;
+    border: 1px solid var(--color-gray);
+    border-radius: var(--radius-lg);
+    background: var(--color-white);
     color: var(--color-text);
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-md);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(7, 160, 129, 0.1);
+    background: var(--color-white);
+}
+
+.search-input::placeholder {
+    color: var(--color-muted);
+    opacity: 0.7;
+}
+
+.search-icon {
+    position: absolute;
+    left: 1rem;
+    color: var(--color-muted);
+    pointer-events: none;
+    z-index: 1;
+    transition: color 0.2s ease;
+}
+
+.search-input:focus+.search-icon,
+.search-wrapper:focus-within .search-icon {
+    color: var(--color-primary);
+}
+
+.clear-btn {
+    position: absolute;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    color: var(--color-muted);
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    opacity: 0;
+    transform: scale(0.8);
+    min-width: 44px;
+    min-height: 44px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.clear-btn:hover {
+    color: var(--color-text);
+    background: var(--color-light);
+}
+
+.clear-btn.visible {
+    opacity: 1;
+    transform: scale(1);
 }
 
 .paciente-info {
