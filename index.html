@@ -281,16 +281,19 @@
                         <div class="input-group">
                             <select id="interesse" required>
                                 <option value="" disabled selected>Selecione um interesse</option>
-                                <option value="botox">Toxina Botulínica</option>
-                                <option value="preenchimento">Preenchimento</option>
-                                <option value="bioestimulador">Bioestimuladores</option>
+                                <option value="avaliacao">Avaliação Médica</option>
+                                <option value="eeg">Exame de EEG</option>
+                                <option value="ortomolecular">Avaliação Ortomolecular</option>
+                                <option value="bioimpendancia">Bioimpedância</option>
+                                <option value="soroterapia">Soroterapia</option>
                                 <option value="outro">Outros / Avaliação</option>
                             </select>
                         </div>
                         <div class="input-group">
                             <textarea id="mensagem" rows="4" required placeholder="Mensagem (opcional)"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-block">Enviar Mensagem</button>
+                        <button type="submit" class="btn btn-primary btn-block" onclick=enviarMsgForm()>Enviar
+                            Mensagem</button>
                     </form>
                 </div>
             </div>
