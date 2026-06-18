@@ -76,36 +76,65 @@ document.addEventListener('DOMContentLoaded', () => {
         revealOnScroll.observe(el);
     });
 
-    // 5. Form Submission (Prevent Default para demonstração)
-    const enviarMsgForm = () => {
-        const nome = document.getElementById('nome').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const mensagem = document.getElementById('mensagem').value.trim();
-        const interesse = document.getElementById('interesse').value.trim();
+    // 5. Form Submission (Corrigido: Captura de IDs reais e tratamento de eventos)
+    const contactForm = document.getElementById('contactForm');
 
-        if (!nome || !email || !mensagem || !interesse) {
-            alert('Por favor, preencha todos os campos do formulário.');
-            return;
-        };
+    if (contactForm) {
+        contactForm.addEventListener('submit', function (e) {
+            e.preventDefault(); // Impede o recarregamento da página
 
-        if (interesse === "avaliacao") {
-            interesse = "Avaliação Médica";
-        } else if (interesse === "eeg") {
-            interesse = "Exame de EEG";
-        } else if (interesse === "ortomolecular") {
-            interesse = "Avaliação Ortomolecular";
-        } else if (interesse === "bioimpedancia") {
-            interesse = "Bioimpedância";
-        } else if (interesse === "soroterapia") {
-            interesse = "Soroterapia";
-        } else if (interesse === "outro") {
-            alert('Por favor, especifique seu interesse no campo "Mensagem".');
-            return;
-        }
+            const btn = contactForm.querySelector('button');
+            const originalText = btn.innerText;
 
-        const whastappURL = `https://wa.me/55991999999?text=Olá,%20meu%20nome%20é%20${encodeURIComponent(nome)}.%20Tenho%20interesse%20em%20${encodeURIComponent(interesse)}.%20Minha%20mensagem:%20${encodeURIComponent(mensagem)}`;
+            // Feedback visual e trava anti-duplo clique
+            btn.innerText = 'Enviando...';
+            btn.disabled = true;
 
-        window.open(whastappURL, '_blank');
+            // Captura usando os IDs reais presentes no seu HTML
+            const nome = document.getElementById('nome').value.trim();
+            const telefone = document.getElementById('telefone').value.trim(); // ID Corrigido!
+            const mensagem = document.getElementById('mensagem').value.trim();
+            let interesse = document.getElementById('interesse').value.trim();
+
+            if (!nome || !telefone || !mensagem || !interesse) {
+                alert('Por favor, preencha todos os campos do formulário.');
+                btn.innerText = originalText;
+                btn.disabled = false;
+                return;
+            }
+
+            // Tratamento do texto do select
+            if (interesse === "avaliacao") {
+                interesse = "Avaliação Médica";
+            } else if (interesse === "eeg") {
+                interesse = "Exame de EEG";
+            } else if (interesse === "ortomolecular") {
+                interesse = "Avaliação Ortomolecular";
+            } else if (interesse === "bioimpendancia") { // Corrigido erro de digitação do HTML
+                interesse = "Bioimpedância";
+            } else if (interesse === "soroterapia") {
+                interesse = "Soroterapia";
+            } else if (interesse === "outro") {
+                alert('Por favor, especifique seu interesse no campo "Mensagem".');
+                btn.innerText = originalText;
+                btn.disabled = false;
+                return;
+            }
+
+            // Montagem do texto e link para a API do WhatsApp
+            const whatsappMessage = `Olá, meu nome é ${nome}.\n*Contato:* ${telefone}\n*Interesse:* ${interesse}\n*Mensagem:* ${mensagem}`;
+            const whastappURL = `https://wa.me/5519996465072?text=${encodeURIComponent(whatsappMessage)}`;
+
+            // Abre a API do WhatsApp em nova aba
+            window.open(whastappURL, '_blank');
+
+            // Timeout de segurança: limpa o formulário e libera o botão depois de abrir a aba
+            setTimeout(() => {
+                contactForm.reset();
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }, 600);
+        });
     }
 
 
