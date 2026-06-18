@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 interesse = "Exame de EEG";
             } else if (interesse === "ortomolecular") {
                 interesse = "Avaliação Ortomolecular";
-            } else if (interesse === "bioimpendancia") { // Corrigido erro de digitação do HTML
+            } else if (interesse === "bioimpedancia") { // Corrigido erro de digitação do HTML
                 interesse = "Bioimpedância";
             } else if (interesse === "soroterapia") {
                 interesse = "Soroterapia";
