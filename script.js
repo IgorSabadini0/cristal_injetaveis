@@ -76,224 +76,263 @@ document.addEventListener('DOMContentLoaded', () => {
         revealOnScroll.observe(el);
     });
 
-    // 5. Form Submission (Prevent Default para demonstração)
+    // 5. Form Submission (Corrigido: Captura de IDs reais e tratamento de eventos)
     const contactForm = document.getElementById('contactForm');
 
     if (contactForm) {
         contactForm.addEventListener('submit', function (e) {
-            e.preventDefault();
+            e.preventDefault(); // Impede o recarregamento da página
 
             const btn = contactForm.querySelector('button');
             const originalText = btn.innerText;
 
+            // Feedback visual e trava anti-duplo clique
             btn.innerText = 'Enviando...';
             btn.disabled = true;
 
-            // Simulação de envio
+            // Captura usando os IDs reais presentes no seu HTML
+            const nome = document.getElementById('nome').value.trim();
+            const telefone = document.getElementById('telefone').value.trim(); // ID Corrigido!
+            const mensagem = document.getElementById('mensagem').value.trim();
+            let interesse = document.getElementById('interesse').value.trim();
+
+            if (!nome || !telefone || !mensagem || !interesse) {
+                alert('Por favor, preencha todos os campos do formulário.');
+                btn.innerText = originalText;
+                btn.disabled = false;
+                return;
+            }
+
+            // Tratamento do texto do select
+            if (interesse === "avaliacao") {
+                interesse = "Avaliação Médica";
+            } else if (interesse === "eeg") {
+                interesse = "Exame de EEG";
+            } else if (interesse === "ortomolecular") {
+                interesse = "Avaliação Ortomolecular";
+            } else if (interesse === "bioimpendancia") { // Corrigido erro de digitação do HTML
+                interesse = "Bioimpedância";
+            } else if (interesse === "soroterapia") {
+                interesse = "Soroterapia";
+            } else if (interesse === "outro") {
+                alert('Por favor, especifique seu interesse no campo "Mensagem".');
+                btn.innerText = originalText;
+                btn.disabled = false;
+                return;
+            }
+
+            // Montagem do texto e link para a API do WhatsApp
+            const whatsappMessage = `Olá, meu nome é ${nome}.\n*Contato:* ${telefone}\n*Interesse:* ${interesse}\n*Mensagem:* ${mensagem}`;
+            const whastappURL = `https://wa.me/5519996465072?text=${encodeURIComponent(whatsappMessage)}`;
+
+            // Abre a API do WhatsApp em nova aba
+            window.open(whastappURL, '_blank');
+
+            // Timeout de segurança: limpa o formulário e libera o botão depois de abrir a aba
             setTimeout(() => {
-                alert('Mensagem enviada com sucesso! Entraremos em contato em breve.');
                 contactForm.reset();
                 btn.innerText = originalText;
                 btn.disabled = false;
-            }, 1500);
+            }, 600);
         });
     }
-});
 
-// Carrega posts do blog a partir de posts.json
-let allPosts = []; // Armazena todos os posts para pesquisa
-let postsContent = {}; // Cache do conteúdo completo dos posts
 
-async function loadPosts() {
-    try {
-        const res = await fetch("data/posts.json", { cache: "no-store" });
-        if (!res.ok) throw new Error("Falha ao carregar posts.json");
-        const posts = await res.json();
-        allPosts = posts; // Armazena posts para pesquisa
+    // Carrega posts do blog a partir de posts.json
+    let allPosts = []; // Armazena todos os posts para pesquisa
+    let postsContent = {}; // Cache do conteúdo completo dos posts
 
-        // Carrega conteúdo completo dos posts em background
-        loadPostsContent(posts);
-
-        renderPosts(posts);
-    } catch (e) {
-        console.warn(e);
-        const empty = document.getElementById("no-posts");
-        if (empty) empty.hidden = false;
-    }
-}
-
-// Carrega o conteúdo completo de cada post
-async function loadPostsContent(posts) {
-    // Carrega posts em paralelo para melhor performance
-    const promises = posts.map(async (post) => {
+    async function loadPosts() {
         try {
-            const slug = new URLSearchParams(post.url.split('?')[1]).get('slug');
-            const postUrl = slug ? `posts/${slug}.html` : post.url;
+            const res = await fetch("data/posts.json", { cache: "no-store" });
+            if (!res.ok) throw new Error("Falha ao carregar posts.json");
+            const posts = await res.json();
+            allPosts = posts; // Armazena posts para pesquisa
 
-            const response = await fetch(postUrl, { cache: "no-store" });
-            if (response.ok) {
-                const html = await response.text();
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
+            // Carrega conteúdo completo dos posts em background
+            loadPostsContent(posts);
 
-                // Tenta diferentes seletores para encontrar o conteúdo principal
-                const contentSelectors = [
-                    '.post-content',
-                    '.content',
-                    'main article',
-                    'article',
-                    'main',
-                    '.post-body',
-                    '.entry-content'
-                ];
-
-                let contentElement = null;
-                for (const selector of contentSelectors) {
-                    contentElement = doc.querySelector(selector);
-                    if (contentElement) break;
-                }
-
-                // Se não encontrou, usa o body mas remove header, nav, footer
-                if (!contentElement) {
-                    contentElement = doc.body;
-                    if (contentElement) {
-                        // Remove elementos que não são conteúdo principal
-                        const elementsToRemove = contentElement.querySelectorAll('header, nav, footer, .header, .nav, .footer, script, style');
-                        elementsToRemove.forEach(el => el.remove());
-                    }
-                }
-
-                const textContent = contentElement ? contentElement.textContent || contentElement.innerText : '';
-
-                // Remove espaços extras, quebras de linha e caracteres especiais
-                const cleanContent = textContent
-                    .replace(/\s+/g, ' ')
-                    .replace(/[^\w\sáàâãéèêíìîóòôõúùûçÁÀÂÃÉÈÊÍÌÎÓÒÔÕÚÙÛÇ]/gi, ' ')
-                    .trim();
-
-                postsContent[post.url] = cleanContent;
-
-                // Atualiza o placeholder da pesquisa para indicar que o conteúdo foi carregado
-                updateSearchPlaceholder();
-            }
+            renderPosts(posts);
         } catch (e) {
-            console.warn(`Erro ao carregar conteúdo do post ${post.url}:`, e);
-            postsContent[post.url] = post.excerpt || '';
+            console.warn(e);
+            const empty = document.getElementById("no-posts");
+            if (empty) empty.hidden = false;
         }
-    });
-
-    await Promise.all(promises);
-}
-
-// Atualiza o placeholder da pesquisa
-function updateSearchPlaceholder() {
-    const searchInput = document.getElementById("searchInput");
-    if (searchInput && Object.keys(postsContent).length === allPosts.length) {
-        searchInput.placeholder = "Pesquisar por título, conteúdo ou palavras-chave...";
-    }
-}
-
-function renderPosts(posts) {
-    const list = document.getElementById("posts");
-    const empty = document.getElementById("no-posts");
-
-    // Limpa posts existentes
-    list.innerHTML = "";
-
-    if (!Array.isArray(posts) || posts.length === 0) {
-        empty.hidden = false;
-        return;
     }
 
-    empty.hidden = true;
+    // Carrega o conteúdo completo de cada post
+    async function loadPostsContent(posts) {
+        // Carrega posts em paralelo para melhor performance
+        const promises = posts.map(async (post) => {
+            try {
+                const slug = new URLSearchParams(post.url.split('?')[1]).get('slug');
+                const postUrl = slug ? `posts/${slug}.html` : post.url;
 
-    // Ordena por data desc
-    posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+                const response = await fetch(postUrl, { cache: "no-store" });
+                if (response.ok) {
+                    const html = await response.text();
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
 
-    posts.forEach(p => {
-        const card = document.createElement("article");
-        card.className = "post-card";
-        const date = new Date(p.date);
-        const dateStr = date.toLocaleDateString("pt-BR", { year: "numeric", month: "short", day: "2-digit" });
+                    // Tenta diferentes seletores para encontrar o conteúdo principal
+                    const contentSelectors = [
+                        '.post-content',
+                        '.content',
+                        'main article',
+                        'article',
+                        'main',
+                        '.post-body',
+                        '.entry-content'
+                    ];
 
-        // Extrai o slug da URL para criar o link de navegação
-        const slug = new URLSearchParams(p.url.split('?')[1]).get('slug');
-        const navigationUrl = slug ? `post.html?slug=${slug}` : p.url;
+                    let contentElement = null;
+                    for (const selector of contentSelectors) {
+                        contentElement = doc.querySelector(selector);
+                        if (contentElement) break;
+                    }
 
-        card.innerHTML = `
-      <div class="post-meta">🗓️ <span>${dateStr}</span></div>
-      <h3><a href="${navigationUrl}" rel="noopener">${p.title}</a></h3>
-      <p>${p.excerpt || ""}</p>
-    `;
-        list.appendChild(card);
-    });
-}
+                    // Se não encontrou, usa o body mas remove header, nav, footer
+                    if (!contentElement) {
+                        contentElement = doc.body;
+                        if (contentElement) {
+                            // Remove elementos que não são conteúdo principal
+                            const elementsToRemove = contentElement.querySelectorAll('header, nav, footer, .header, .nav, .footer, script, style');
+                            elementsToRemove.forEach(el => el.remove());
+                        }
+                    }
 
-// Inicializa a pesquisa
-function initSearch() {
-    const searchInput = document.getElementById("searchInput");
-    const clearBtn = document.getElementById("clearSearch");
+                    const textContent = contentElement ? contentElement.textContent || contentElement.innerText : '';
 
-    if (!searchInput || !clearBtn) return;
+                    // Remove espaços extras, quebras de linha e caracteres especiais
+                    const cleanContent = textContent
+                        .replace(/\s+/g, ' ')
+                        .replace(/[^\w\sáàâãéèêíìîóòôõúùûçÁÀÂÃÉÈÊÍÌÎÓÒÔÕÚÙÛÇ]/gi, ' ')
+                        .trim();
 
-    // Função de pesquisa
-    function searchPosts(query) {
-        if (!query.trim()) {
-            renderPosts(allPosts);
-            clearBtn.classList.remove("visible");
+                    postsContent[post.url] = cleanContent;
+
+                    // Atualiza o placeholder da pesquisa para indicar que o conteúdo foi carregado
+                    updateSearchPlaceholder();
+                }
+            } catch (e) {
+                console.warn(`Erro ao carregar conteúdo do post ${post.url}:`, e);
+                postsContent[post.url] = post.excerpt || '';
+            }
+        });
+
+        await Promise.all(promises);
+    }
+
+    // Atualiza o placeholder da pesquisa
+    function updateSearchPlaceholder() {
+        const searchInput = document.getElementById("searchInput");
+        if (searchInput && Object.keys(postsContent).length === allPosts.length) {
+            searchInput.placeholder = "Pesquisar por título, conteúdo ou palavras-chave...";
+        }
+    }
+
+    function renderPosts(posts) {
+        const list = document.getElementById("posts");
+        const empty = document.getElementById("no-posts");
+
+        // Limpa posts existentes
+        list.innerHTML = "";
+
+        if (!Array.isArray(posts) || posts.length === 0) {
+            empty.hidden = false;
             return;
         }
 
-        clearBtn.classList.add("visible");
+        empty.hidden = true;
 
-        const filteredPosts = allPosts.filter(post => {
-            // Busca no título e excerpt primeiro
-            const titleExcerpt = `${post.title} ${post.excerpt || ""}`.toLowerCase();
+        // Ordena por data desc
+        posts.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-            // Se encontrou no título/excerpt, retorna true
-            if (titleExcerpt.includes(query.toLowerCase())) {
-                return true;
+        posts.forEach(p => {
+            const card = document.createElement("article");
+            card.className = "post-card";
+            const date = new Date(p.date);
+            const dateStr = date.toLocaleDateString("pt-BR", { year: "numeric", month: "short", day: "2-digit" });
+
+            // Extrai o slug da URL para criar o link de navegação
+            const slug = new URLSearchParams(p.url.split('?')[1]).get('slug');
+            const navigationUrl = slug ? `post.html?slug=${slug}` : p.url;
+
+            card.innerHTML = `
+    <div class="post-meta">🗓️ <span>${dateStr}</span></div>
+    <h3><a href="${navigationUrl}" rel="noopener">${p.title}</a></h3>
+    <p>${p.excerpt || ""}</p>
+    `;
+            list.appendChild(card);
+        });
+    }
+
+    // Inicializa a pesquisa
+    function initSearch() {
+        const searchInput = document.getElementById("searchInput");
+        const clearBtn = document.getElementById("clearSearch");
+
+        if (!searchInput || !clearBtn) return;
+
+        // Função de pesquisa
+        function searchPosts(query) {
+            if (!query.trim()) {
+                renderPosts(allPosts);
+                clearBtn.classList.remove("visible");
+                return;
             }
 
-            // Busca no conteúdo completo se disponível
-            const fullContent = postsContent[post.url];
-            if (fullContent) {
-                return fullContent.toLowerCase().includes(query.toLowerCase());
-            }
+            clearBtn.classList.add("visible");
 
-            return false;
+            const filteredPosts = allPosts.filter(post => {
+                // Busca no título e excerpt primeiro
+                const titleExcerpt = `${post.title} ${post.excerpt || ""}`.toLowerCase();
+
+                // Se encontrou no título/excerpt, retorna true
+                if (titleExcerpt.includes(query.toLowerCase())) {
+                    return true;
+                }
+
+                // Busca no conteúdo completo se disponível
+                const fullContent = postsContent[post.url];
+                if (fullContent) {
+                    return fullContent.toLowerCase().includes(query.toLowerCase());
+                }
+
+                return false;
+            });
+
+            renderPosts(filteredPosts);
+        }
+
+        // Event listeners
+        searchInput.addEventListener("input", (e) => {
+            searchPosts(e.target.value);
         });
 
-        renderPosts(filteredPosts);
+        clearBtn.addEventListener("click", () => {
+            searchInput.value = "";
+            searchInput.focus();
+            searchPosts("");
+        });
+
+        // Limpa pesquisa ao pressionar Escape
+        searchInput.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") {
+                searchInput.value = "";
+                searchPosts("");
+            }
+        });
     }
 
-    // Event listeners
-    searchInput.addEventListener("input", (e) => {
-        searchPosts(e.target.value);
-    });
+    // Carrega posts e inicializa pesquisa
+    loadPosts().then(() => {
+        initSearch();
 
-    clearBtn.addEventListener("click", () => {
-        searchInput.value = "";
-        searchInput.focus();
-        searchPosts("");
-    });
-
-    // Limpa pesquisa ao pressionar Escape
-    searchInput.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-            searchInput.value = "";
-            searchPosts("");
+        // Adiciona indicador de carregamento
+        const searchInput = document.getElementById("searchInput");
+        if (searchInput) {
+            searchInput.placeholder = "Carregando conteúdo para pesquisa...";
         }
     });
-}
-
-// Carrega posts e inicializa pesquisa
-loadPosts().then(() => {
-    initSearch();
-
-    // Adiciona indicador de carregamento
-    const searchInput = document.getElementById("searchInput");
-    if (searchInput) {
-        searchInput.placeholder = "Carregando conteúdo para pesquisa...";
-    }
 });
