@@ -235,6 +235,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const list = document.getElementById("posts");
         const empty = document.getElementById("no-posts");
 
+        if (!list) return;
+
         // Limpa posts existentes
         list.innerHTML = "";
 
