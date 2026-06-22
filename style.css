@@ -739,6 +739,147 @@ img {
     opacity: 1;
 }
 
+/* --- ESTILOS ESPECÍFICOS DA PÁGINA CLÍNICA --- */
+
+/* Hero/Cabeçalho da Página */
+.clinica-hero {
+    padding: 160px 0 100px;
+    background: linear-gradient(rgba(16, 64, 53, 0.85), rgba(16, 64, 53, 0.85)), url('https://i.ibb.co/qYrzXk3W/recepcao.jpg') center/cover no-repeat;
+    color: var(--color-white);
+    text-align: center;
+}
+
+.clinica-hero h1 {
+    font-size: 3.8rem;
+    color: var(--color-white);
+    margin-bottom: 15px;
+}
+
+.clinica-hero p {
+    font-size: 1.2rem;
+    max-width: 700px;
+    margin: 0 auto;
+    font-weight: 300;
+    opacity: 0.9;
+    line-height: 1.6;
+}
+
+/* Ajustes da Seção de Introdução */
+.intro-features {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.intro-feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.intro-feature-item i {
+    color: var(--color-primary);
+    font-size: 1.4rem;
+    margin-top: 3px;
+    width: 24px;
+    text-align: center;
+}
+
+.intro-feature-item h4 {
+    font-size: 1.15rem;
+    margin-bottom: 5px;
+    font-family: var(--font-body);
+    font-weight: 600;
+}
+
+.intro-feature-item p {
+    margin-bottom: 0 !important;
+    font-size: 0.95rem;
+    color: var(--color-text);
+}
+
+/* Galeria de Fotos Moderna (Grid) */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.gallery-card {
+    background: var(--color-white);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-gray);
+    transition: var(--transition);
+}
+
+.gallery-card:hover {
+    box-shadow: var(--shadow-hover);
+    border-color: var(--color-primary);
+    transform: translateY(-5px);
+}
+
+.gallery-img-wrapper {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+}
+
+.gallery-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition);
+}
+
+.gallery-card:hover .gallery-img-wrapper img {
+    transform: scale(1.05);
+}
+
+.gallery-caption {
+    padding: 25px;
+}
+
+.gallery-caption h3 {
+    font-size: 1.3rem;
+    color: var(--color-dark);
+    margin-bottom: 8px;
+    font-family: var(--font-heading);
+    font-weight: 600;
+}
+
+.gallery-caption p {
+    font-size: 0.95rem;
+    color: var(--color-muted);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* CTA Section */
+.cta-section {
+    background: var(--color-dark);
+    color: var(--color-white);
+    text-align: center;
+    padding: 80px 0;
+}
+
+.cta-section h2 {
+    color: var(--color-white);
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+.cta-section p {
+    font-size: 1.15rem;
+    max-width: 600px;
+    margin: 0 auto 30px;
+    font-weight: 300;
+    opacity: 0.9;
+}
+
 /* =========================================
    Responsividade
    ========================================= */
@@ -823,6 +964,18 @@ img {
     .footer-container {
         grid-template-columns: 1fr;
     }
+
+    .clinica-hero {
+        padding: 130px 0 70px;
+    }
+
+    .clinica-hero h1 {
+        font-size: 2.6rem;
+    }
+
+    .gallery-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 480px) {
@@ -838,4 +991,23 @@ img {
     .contato-form {
         padding: 40px 20px;
     }
+}
+
+/* Página de ambientes da clínica */
+.infrastructure-btn { margin-top: 28px; }
+.clinica-eyebrow { margin-bottom: 8px !important; color: var(--color-secondary); font-size: .85rem !important; font-weight: 600 !important; letter-spacing: .18em; text-transform: uppercase; }
+.clinic-gallery-section { background: #f4f9f8; }
+.environment-list { display: grid; gap: 70px; }
+.environment h2 { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; padding-bottom: 14px; border-bottom: 1px solid var(--color-gray); font-size: 2rem; }
+.environment h2 i { color: var(--color-primary); font-size: 1.35rem; }
+.environment-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 360px)); justify-content: center; gap: 22px; }
+.environment-grid img { width: 100%; aspect-ratio: 9 / 16; height: auto; object-fit: contain; border: 1px solid var(--color-gray); border-radius: var(--radius-md); background: var(--color-white); box-shadow: var(--shadow-sm); transition: var(--transition); }
+.environment-grid img:hover { box-shadow: var(--shadow-hover); transform: translateY(-3px); }
+.environment-grid-single img { grid-column: 1 / -1; max-width: 760px; justify-self: center; }
+
+@media (max-width: 768px) {
+    .environment-list { gap: 50px; }
+    .environment h2 { font-size: 1.55rem; }
+    .environment-grid { grid-template-columns: 1fr; }
+    .environment-grid img { height: auto; }
 }
