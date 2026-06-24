@@ -4,10 +4,11 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Artigos e Notícias — Clínica Cristal</title>
+    <title>Artigos sobre Saúde em Mogi Mirim | Cristal Injetáveis</title>
     <meta name="description"
-        content="Confira as publicações médicas, artigos e orientações sobre saúde, bem-estar e estética avançada da Clínica Cristal." />
+        content="Confira artigos médicos da Cristal Injetáveis em Mogi Mirim sobre acupuntura, neurologia, tratamentos injetáveis, bem-estar e especialidades médicas." />
     <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large" />
+    <link rel="canonical" href="https://www.cristalinjetaveis.com.br/post.html" />
     <link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,14 +21,18 @@
     <link rel="preload" as="image" href="https://i.ibb.co/MyTZbSrk/logo.png" />
 
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Artigos e Notícias — Clínica Cristal" />
+    <meta property="og:title" content="Artigos sobre Saúde em Mogi Mirim | Cristal Injetáveis" />
     <meta property="og:description"
-        content="Confira as publicações médicas, artigos e orientações sobre saúde, bem-estar e estética avançada." />
-    <meta property="og:url" content="https://www.clinicacristal.com.br/post.html" />
+        content="Publicações médicas sobre acupuntura, neurologia, tratamentos injetáveis, bem-estar e especialidades da clínica em Mogi Mirim." />
+    <meta property="og:image" content="https://i.ibb.co/MyTZbSrk/logo.png" />
+    <meta property="og:url" content="https://www.cristalinjetaveis.com.br/post.html" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="Cristal Injetáveis" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Artigos e Notícias — Clínica Cristal" />
+    <meta name="twitter:title" content="Artigos sobre Saúde em Mogi Mirim | Cristal Injetáveis" />
     <meta name="twitter:description"
-        content="Confira as publicações médicas, artigos e orientações sobre saúde, bem-estar e estética avançada." />
+        content="Artigos médicos e orientações da Cristal Injetáveis em Mogi Mirim." />
+    <meta name="twitter:image" content="https://i.ibb.co/MyTZbSrk/logo.png" />
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -37,12 +42,12 @@
   {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    "name": "Artigos e Notícias — Clínica Cristal",
-    "description": "Lista de artigos e publicações médicas da clínica.",
+    "name": "Artigos sobre Saúde em Mogi Mirim | Cristal Injetáveis",
+    "description": "Lista de artigos e publicações médicas da Cristal Injetáveis em Mogi Mirim.",
     "isPartOf": {
       "@type": "WebSite",
-      "name": "Clínica Cristal",
-      "url": "https://www.clinicacristal.com.br/"
+      "name": "Cristal Injetáveis",
+      "url": "https://www.cristalinjetaveis.com.br/"
     }
   }
   </script>
@@ -51,7 +56,8 @@
         style="position: sticky; top: 0; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); z-index: 1000;">
         <div class="container nav-container">
             <a href="index.html" class="logo">
-                <img src="https://i.ibb.co/MyTZbSrk/logo.png" alt="Clínica Cristal Logo">
+                <img src="https://i.ibb.co/MyTZbSrk/logo.png"
+                    alt="Cristal Injetáveis, clínica médica em Mogi Mirim">
             </a>
 
             <nav class="navbar">
@@ -85,6 +91,9 @@
                     Blog & Publicações</h1>
                 <p class="section-description" style="margin: 0; color: #666;">Artigos médicos e informativos
                     desenvolvidos por nossa equipe para orientar você.</p>
+                <noscript>
+                    <p><a href="posts/acupuntura.html">Acupuntura: benefícios e aplicações em Mogi Mirim</a></p>
+                </noscript>
             </header>
 
             <div id="allPostsContainer" style="min-height: 200px;">
@@ -103,7 +112,8 @@
     <footer class="footer">
         <div class="container footer-container">
             <div class="footer-brand">
-                <img src="https://i.ibb.co/MyTZbSrk/logo.png" alt="Clínica Cristal Logo" class="footer-logo">
+                <img src="https://i.ibb.co/MyTZbSrk/logo.png"
+                    alt="Cristal Injetáveis, clínica de especialidades médicas em Mogi Mirim" class="footer-logo">
                 <p>Cuidado médico multidisciplinar, exames e diagnósticos, reabilitação e injetáveis com excelência.</p>
             </div>
             <div class="footer-links">
@@ -160,6 +170,7 @@
                 if (!metaRes.ok) throw new Error('Falha ao carregar posts.json');
 
                 const posts = await metaRes.json();
+                updatePostMetadata(posts);
 
                 if (!Array.isArray(posts) || posts.length === 0) {
                     container.innerHTML = '<p style="text-align:center; color:#666;">Nenhuma publicação encontrada.</p>';
@@ -215,6 +226,54 @@
                 console.error(e);
                 container.innerHTML = '<p style="text-align:center; color:#d9534f;">Ocorreu um erro ao carregar as publicações. Tente novamente mais tarde.</p>';
             }
+        }
+
+        function updatePostMetadata(posts) {
+            const params = new URLSearchParams(window.location.search);
+            const targetSlug = params.get('slug');
+            if (!targetSlug || !Array.isArray(posts)) return;
+
+            const post = posts.find(item => {
+                const slug = item.slug || new URLSearchParams((item.url || '').split('?')[1] || '').get('slug');
+                return slug === targetSlug;
+            });
+            if (!post) return;
+
+            const title = `${post.title} | Cristal Injetáveis em Mogi Mirim`;
+            const description = post.excerpt || 'Artigo médico da Cristal Injetáveis em Mogi Mirim.';
+            const canonical = `https://www.cristalinjetaveis.com.br/post.html?slug=${targetSlug}`;
+            const image = post.image || 'https://i.ibb.co/MyTZbSrk/logo.png';
+
+            document.title = title;
+            setMeta('name', 'description', description);
+            setLink('canonical', canonical);
+            setMeta('property', 'og:title', title);
+            setMeta('property', 'og:description', description);
+            setMeta('property', 'og:url', canonical);
+            setMeta('property', 'og:image', image);
+            setMeta('name', 'twitter:title', title);
+            setMeta('name', 'twitter:description', description);
+            setMeta('name', 'twitter:image', image);
+        }
+
+        function setMeta(attribute, key, content) {
+            let tag = document.querySelector(`meta[${attribute}="${key}"]`);
+            if (!tag) {
+                tag = document.createElement('meta');
+                tag.setAttribute(attribute, key);
+                document.head.appendChild(tag);
+            }
+            tag.setAttribute('content', content);
+        }
+
+        function setLink(rel, href) {
+            let tag = document.querySelector(`link[rel="${rel}"]`);
+            if (!tag) {
+                tag = document.createElement('link');
+                tag.setAttribute('rel', rel);
+                document.head.appendChild(tag);
+            }
+            tag.setAttribute('href', href);
         }
 
         // Inicializa o carregamento dos posts
