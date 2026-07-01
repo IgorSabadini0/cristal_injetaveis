@@ -162,6 +162,14 @@ img {
     width: 100%;
 }
 
+.btn-back {
+    margin-top: 20px;
+    font-weight: bold;
+    background: var(--color-light);
+    color: #C49A45;
+    transition: var(--transition);
+}
+
 /* =========================================
    Header & Navegação
    ========================================= */
