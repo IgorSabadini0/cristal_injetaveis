@@ -866,6 +866,12 @@ img {
     margin: 0;
 }
 
+.environment-grid img.clinic-image {
+    object-fit: fill;
+    width: 100%;
+    height: auto;
+}
+
 /* CTA Section */
 .cta-section {
     background: var(--color-dark);
