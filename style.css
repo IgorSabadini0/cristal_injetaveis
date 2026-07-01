@@ -1,5 +1,5 @@
 /* =========================================
-   Variáveis e Reset
+    Variáveis e Reset
    ========================================= */
 :root {
     /* Paleta de Cores baseada na logo */
@@ -122,7 +122,7 @@ img {
 }
 
 /* =========================================
-   Botões
+    Botões
    ========================================= */
 .btn {
     display: inline-block;
@@ -171,7 +171,7 @@ img {
 }
 
 /* =========================================
-   Header & Navegação
+    Header & Navegação
    ========================================= */
 .header {
     position: fixed;
@@ -235,7 +235,7 @@ img {
 }
 
 /* =========================================
-   Hero Section
+    Hero Section
    ========================================= */
 .hero {
     height: 100vh;
@@ -281,7 +281,7 @@ img {
 }
 
 /* =========================================
-   Sobre Section
+    Sobre Section
    ========================================= */
 .sobre-container {
     display: grid;
@@ -323,7 +323,7 @@ img {
 }
 
 /* =========================================
-   Serviços Section
+    Serviços Section
    ========================================= */
 .servicos-grid {
     display: grid;
@@ -374,7 +374,7 @@ img {
 }
 
 /* =========================================
-   Diferenciais Section
+    Diferenciais Section
    ========================================= */
 .diferenciais-grid {
     display: grid;
@@ -399,7 +399,7 @@ img {
 }
 
 /* =========================================
-   Blog Section
+    Blog Section
    ========================================= */
 .blogs-grid {
     display: grid;
@@ -560,7 +560,7 @@ img {
 }
 
 /* =========================================
-   Contato Section
+    Contato Section
    ========================================= */
 .contato {
     background-color: var(--color-light);
@@ -671,7 +671,7 @@ img {
 }
 
 /* =========================================
-   Footer
+    Footer
    ========================================= */
 .footer {
     background: var(--color-dark);
@@ -731,7 +731,7 @@ img {
 }
 
 /* =========================================
-   Animações (Reveal simplificado)
+    Animações (Reveal simplificado)
    ========================================= */
 /* Reduzidas para apenas um Fade-in sutil, sem movimentação */
 .reveal,
@@ -889,7 +889,7 @@ img {
 }
 
 /* =========================================
-   Responsividade
+    Responsividade
    ========================================= */
 @media (max-width: 992px) {
     .hero-content h1 {
