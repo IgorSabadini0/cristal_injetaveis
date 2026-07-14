@@ -10,5 +10,11 @@
         "date": "06/17/2026",
         "excerpt": "A acupuntura é uma prática terapêutica milenar que visa restabelecer o equilíbrio do corpo e promover o bem-estar.",
         "url": "post.html?slug=acupuntura"
+    },
+    {
+        "title": "GLP-1: O Hormônio da Saciedade",
+        "date": "06/17/2026",
+        "excerpt": "Descubra como os análogos de GLP-1 atuam no controle do apetite e no gerenciamento do peso.",
+        "url": "post.html?slug=glp1"
     }
 ]
