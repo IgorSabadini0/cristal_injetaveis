@@ -199,13 +199,18 @@
 
     <!-- blog Section -->
     <section id="blog" class="section reveal">
-        <div class="section-header reveal">
-            <h2 class="section-title">Artigos & Notícias - <a href="post.html"><span class="acessar-materia">Acessar
-                        toda a
-                        matéria</span></a></h2>
-        </div>
         <div class="container">
-
+            <div class="section-header blog-header reveal">
+                <div>
+                    <span class="section-eyebrow">Conteúdo Médico</span>
+                    <h2 class="section-title">Artigos & Notícias</h2>
+                    <p class="section-sub">Publicações médicas para informar e orientar.</p>
+                </div>
+                <a href="post.html" class="blog-view-all">
+                    Acessar toda a matéria
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
 
             <!-- Barra de Pesquisa -->
             <div class="search-container">
@@ -228,11 +233,15 @@
                 </div>
             </div>
 
-            <p class="section-sub">Publicações médicas para informar e orientar.</p>
-            <div id="posts" class="grid posts"></div>
+            <div id="posts" class="posts"></div>
             <p id="no-posts" class="muted" hidden>Nenhuma publicação encontrada.</p>
-            <p class="muted small">
-            </p>
+
+            <div class="load-more-wrapper">
+                <button id="loadMoreBtn" class="load-more-btn" hidden>
+                    Carregar mais artigos
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+            </div>
         </div>
     </section>
 
