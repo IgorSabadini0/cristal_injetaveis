@@ -142,6 +142,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let allPosts = []; // Armazena todos os posts para pesquisa
     let postsContent = {}; // Cache do conteúdo completo dos posts
 
+    const POSTS_PER_PAGE = 4; // Quantos posts aparecem por vez na Home
+    let currentPosts = []; // Lista atualmente filtrada (pesquisa aplicada ou não)
+    let visibleCount = POSTS_PER_PAGE; // Quantos posts da lista atual estão visíveis
+
     async function loadPosts() {
         try {
             const res = await fetch("data/posts.json", { cache: "no-store" });
@@ -231,28 +235,50 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Define o conjunto de posts a exibir (todos ou filtrados pela pesquisa)
+    // e reinicia a paginação para a primeira leva.
     function renderPosts(posts) {
-        const list = document.getElementById("posts");
         const empty = document.getElementById("no-posts");
+        const loadMoreBtn = document.getElementById("loadMoreBtn");
+        const list = document.getElementById("posts");
 
-        if (!list) return;
-
-        // Limpa posts existentes
-        list.innerHTML = "";
-
-        if (!Array.isArray(posts) || posts.length === 0) {
-            empty.hidden = false;
-            return;
-        }
-
-        empty.hidden = true;
+        if (!Array.isArray(posts)) posts = [];
 
         // Ordena por data desc
         posts.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-        posts.forEach(p => {
-            const card = document.createElement("article");
-            card.className = "post-card";
+        currentPosts = posts;
+        visibleCount = POSTS_PER_PAGE;
+
+        if (posts.length === 0) {
+            if (list) list.innerHTML = "";
+            if (empty) empty.hidden = false;
+            if (loadMoreBtn) loadMoreBtn.hidden = true;
+            return;
+        }
+
+        if (empty) empty.hidden = true;
+        renderVisiblePosts();
+    }
+
+    // Desenha apenas a "página" atual (currentPosts.slice(0, visibleCount))
+    // e mostra/esconde o botão "Carregar mais" conforme o restante.
+    function renderVisiblePosts() {
+        const list = document.getElementById("posts");
+        const loadMoreBtn = document.getElementById("loadMoreBtn");
+
+        if (!list) return;
+
+        list.innerHTML = "";
+
+        const visiblePosts = currentPosts.slice(0, visibleCount);
+
+        visiblePosts.forEach((p, index) => {
+            // O post mais recente ganha um destaque em largura total (só faz sentido com mais de 1 post)
+            const isFeatured = index === 0 && currentPosts.length > 1;
+
+            const card = document.createElement("a");
+            card.className = isFeatured ? "post-card post-card-featured" : "post-card";
             const date = new Date(p.date);
             const dateStr = date.toLocaleDateString("pt-BR", { year: "numeric", month: "short", day: "2-digit" });
 
@@ -260,12 +286,61 @@ document.addEventListener('DOMContentLoaded', () => {
             const slug = new URLSearchParams(p.url.split('?')[1]).get('slug');
             const navigationUrl = slug ? `post.html?slug=${slug}` : p.url;
 
+            card.href = navigationUrl;
+            card.rel = "noopener";
+
             card.innerHTML = `
-    <div class="post-meta">🗓️ <span>${dateStr}</span></div>
-    <h3><a href="${navigationUrl}" rel="noopener">${p.title}</a></h3>
+    <div class="post-card-top">
+        <span class="post-date"><i class="fa-regular fa-calendar"></i> ${dateStr}</span>
+        ${isFeatured ? '<span class="post-badge">Mais recente</span>' : ''}
+    </div>
+    <h3>${p.title}</h3>
     <p>${p.excerpt || ""}</p>
+    <span class="post-read-more">Ler artigo <i class="fa-solid fa-arrow-right"></i></span>
     `;
             list.appendChild(card);
+        });
+
+        if (loadMoreBtn) {
+            const hasMore = visibleCount < currentPosts.length;
+            const canCollapse = currentPosts.length > POSTS_PER_PAGE;
+
+            if (!hasMore && !canCollapse) {
+                // Cabem todos os posts na primeira leva: não há o que paginar
+                loadMoreBtn.hidden = true;
+            } else {
+                loadMoreBtn.hidden = false;
+                loadMoreBtn.innerHTML = hasMore
+                    ? 'Carregar mais artigos <i class="fa-solid fa-chevron-down"></i>'
+                    : 'Mostrar menos <i class="fa-solid fa-chevron-up"></i>';
+            }
+        }
+    }
+
+    // Inicializa o botão "Carregar mais / Mostrar menos"
+    function initLoadMore() {
+        const loadMoreBtn = document.getElementById("loadMoreBtn");
+        if (!loadMoreBtn) return;
+
+        loadMoreBtn.addEventListener("click", () => {
+            const isCollapsing = visibleCount >= currentPosts.length;
+
+            if (isCollapsing) {
+                visibleCount = POSTS_PER_PAGE;
+            } else {
+                visibleCount += POSTS_PER_PAGE;
+            }
+
+            renderVisiblePosts();
+
+            // Ao recolher, volta o scroll para o topo da seção de blog
+            // para não deixar o usuário "perdido" abaixo dos cards que sumiram
+            if (isCollapsing) {
+                const blogSection = document.getElementById("blog");
+                if (blogSection) {
+                    blogSection.scrollIntoView({ behavior: "smooth", block: "start" });
+                }
+            }
         });
     }
 
@@ -330,6 +405,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Carrega posts e inicializa pesquisa
     loadPosts().then(() => {
         initSearch();
+        initLoadMore();
 
         // Adiciona indicador de carregamento
         const searchInput = document.getElementById("searchInput");
